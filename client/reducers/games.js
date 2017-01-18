@@ -48,7 +48,7 @@ function games(state = {
 
             var currentState = state.currentGame;
 
-            if(currentState && currentState.players[action.username] && currentState.players[action.username].left) {
+            if(!currentState || !currentState.players[action.username] || currentState.players[action.username].left) {
                 delete retState.currentGame;
             }
 

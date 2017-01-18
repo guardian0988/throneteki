@@ -30,6 +30,23 @@ class InnerGameList extends React.Component {
 
     render() {
         var gameList = _.map(this.props.games, game => {
+            var sides = _.map(game.players, player => {
+                return (
+                    <div className='col-md-5'>
+                        <Avatar emailHash={player.emailHash} />
+                        <span>{ player.name }</span>
+                    </div>
+                );
+            });
+
+            var gameLayout = undefined;
+
+            if(sides.length === 2) {
+                gameLayout = <div>{ sides[0] }<span className='col-md-2'><b> vs </b></span>{ sides[1] }</div>;
+            } else {
+                gameLayout = <div>{ sides[0] }</div>;
+            }
+
             return (
                 <div key={ game.id } className='game-row'>
                     { (this.props.currentGame || game.players.length === 2 || game.started) ?
@@ -39,14 +56,7 @@ class InnerGameList extends React.Component {
                     {this.canWatch(game) ?
                         <button className='btn btn-primary pull-right' onClick={event => this.watchGame(event, game)}>Watch</button> : null}
                     <div><b>{ game.name }</b></div>
-                    { game.players.length !== 0 ?
-                    <div>
-                        <Avatar emailHash={game.players[0].emailHash} />
-                        <span>{ game.players.length > 0 ? game.players[0].name : '' }</span>
-                        { game.players.length === 2 ? <span><b>{' vs '}</b>
-                        <Avatar emailHash={game.players[1].emailHash} />
-                        { game.players[1].name }</span> : null }</div>
-                    : null }
+                    { gameLayout }
                 </div>
             );
         });
